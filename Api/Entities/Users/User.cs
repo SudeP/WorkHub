@@ -1,10 +1,9 @@
-﻿using Api.ASPNET.Service.Inheritance;
-using Api.CQRS.Users.Command;
+﻿using Api.CQRS.Users.Command;
 using AutoMapper;
 
 namespace Api.Entities.Users
 {
-    public class User : BaseEntity, IHaveCustomMapping
+    public class User : BaseEntity
     {
         public string GivenName { get; set; }
         public string SurName { get; set; }
@@ -13,8 +12,10 @@ namespace Api.Entities.Users
         public string Email { get; set; }
         public string Phone { get; set; }
 
-        public void CreateMappings(Profile configuration)
+        public override void CreateMappings(Profile configuration)
         {
+            base.CreateMappings(configuration);
+
             configuration.CreateMap<CreateUserCommand, User>();
         }
     }

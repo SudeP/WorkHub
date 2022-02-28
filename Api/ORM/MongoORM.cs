@@ -19,6 +19,7 @@ namespace Api.ORM
             CancellationToken cancellationToken = default);
         public Task<(IEnumerable<Entity>, bool)> FindAsync<Entity>(
             FilterDefinition<Entity> filter,
+            ProjectionDefinition<Entity> projection = null,
             Collation collation = null,
             int? limit = null,
             int? skip = null,
@@ -27,8 +28,18 @@ namespace Api.ORM
         public Task<(UpdateResult, bool)> UpdateOneAsync<Entity>(
             FilterDefinition<Entity> filter,
             UpdateDefinition<Entity> updateDefinition,
-            Collation collation = null,
             bool? bypassDocumentValidation = null,
+            Collation collation = null,
+            bool isUpsert = false,
+            CancellationToken cancellationToken = default);
+        public Task<(Entity, bool)> FindOneAndUpdateAsync<Entity>(
+            FilterDefinition<Entity> filter,
+            UpdateDefinition<Entity> updateDefinition,
+            ProjectionDefinition<Entity> projection = null,
+            ReturnDocument returnDocument = ReturnDocument.After,
+            bool? bypassDocumentValidation = null,
+            Collation collation = null,
+            bool isUpsert = false,
             CancellationToken cancellationToken = default);
         public Task<(DeleteResult, bool)> Remove<Entity>(
             FilterDefinition<Entity> filter,
@@ -73,6 +84,7 @@ namespace Api.ORM
 
         public async Task<(IEnumerable<Entity>, bool)> FindAsync<Entity>(
             FilterDefinition<Entity> filter,
+            ProjectionDefinition<Entity> projection = null,
             Collation collation = null,
             int? limit = null,
             int? skip = null,
@@ -83,6 +95,7 @@ namespace Api.ORM
 
             Task<IAsyncCursor<Entity>> task = collection.FindAsync(filter, new FindOptions<Entity, Entity>
             {
+                Projection = projection,
                 Collation = collation,
                 Limit = limit,
                 Skip = skip,
@@ -91,14 +104,15 @@ namespace Api.ORM
 
             await task;
 
-            return (task.Result.ToList(cancellationToken), task.IsCompletedSuccessfully);
+            return (await task.Result.ToListAsync(cancellationToken), task.IsCompletedSuccessfully);
         }
 
         public async Task<(UpdateResult, bool)> UpdateOneAsync<Entity>(
             FilterDefinition<Entity> filter,
             UpdateDefinition<Entity> updateDefinition,
-            Collation collation = null,
             bool? bypassDocumentValidation = null,
+            Collation collation = null,
+            bool isUpsert = false,
             CancellationToken cancellationToken = default)
         {
             var collection = db.GetCollection<Entity>(typeof(Entity).Name);
@@ -107,7 +121,35 @@ namespace Api.ORM
             {
                 BypassDocumentValidation = bypassDocumentValidation,
                 Collation = collation,
-                IsUpsert = false
+                IsUpsert = isUpsert
+            }, cancellationToken);
+
+            await task;
+
+            return (task.Result, task.IsCompletedSuccessfully);
+        }
+
+
+
+        public async Task<(Entity, bool)> FindOneAndUpdateAsync<Entity>(
+            FilterDefinition<Entity> filter,
+            UpdateDefinition<Entity> updateDefinition,
+            ProjectionDefinition<Entity> projection = null,
+            ReturnDocument returnDocument = ReturnDocument.After,
+            bool? bypassDocumentValidation = null,
+            Collation collation = null,
+            bool isUpsert = false,
+            CancellationToken cancellationToken = default)
+        {
+            var collection = db.GetCollection<Entity>(typeof(Entity).Name);
+
+            Task<Entity> task = collection.FindOneAndUpdateAsync(filter, updateDefinition, new FindOneAndUpdateOptions<Entity, Entity>
+            {
+                Projection = projection,
+                ReturnDocument = returnDocument,
+                BypassDocumentValidation = bypassDocumentValidation,
+                Collation = collation,
+                IsUpsert = isUpsert
             }, cancellationToken);
 
             await task;

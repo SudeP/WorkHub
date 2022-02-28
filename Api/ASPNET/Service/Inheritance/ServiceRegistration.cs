@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -24,8 +26,6 @@ namespace Api
             //@TODO: Swagger'da API açýklamalarý için daha sonrasýnda buraya entegrasyon yapýlacak.
             services.AddSwaggerGen(swagger =>
             {
-                swagger.EnableAnnotations();
-
                 //This is to generate the Default UI of Swagger Documentation
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
@@ -59,6 +59,10 @@ namespace Api
                         System.Array.Empty<string>()
                     }
                 });
+
+                //swagger.EnableAnnotations();
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                swagger.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
             });
 
             services.AddAuthentication(option =>
@@ -111,6 +115,7 @@ namespace Api
             services.AddScoped<IResponseFactory, ResponseFactory>();
             services.AddScoped<IMongoORM, MongoORM>();
 
+            services.AddSingleton<IIdentityService, IdentityService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 

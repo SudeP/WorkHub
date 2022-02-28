@@ -8,7 +8,9 @@ namespace Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status200OK)]
 #pragma warning disable
     public class BaseController : Controller
     {

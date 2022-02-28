@@ -61,25 +61,25 @@ namespace Api.Models.ResponseModel
 
     public interface IResponseFactory
     {
-        public Response<T> OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-        public Response<T> Custom<T>(TaskCode TaskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
+        public Result<T> Custom<T>(TaskCode TaskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
     }
     public class ResponseFactory : IResponseFactory
     {
@@ -89,48 +89,48 @@ namespace Api.Models.ResponseModel
         }
 
         private readonly HttpContext context;
-        public Response<T> OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.OK, resultObject, responseMessages);
-        public Response<T> Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Accepted, resultObject, responseMessages);
-        public Response<T> BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.BadRequest, resultObject, responseMessages);
-        public Response<T> Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Conflict, resultObject, responseMessages);
-        public Response<T> Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Continue, resultObject, responseMessages);
-        public Response<T> Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Created, resultObject, responseMessages);
-        public Response<T> UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.UnprocessableEntity, resultObject, responseMessages);
-        public Response<T> ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.ExpectationFailed, resultObject, responseMessages);
-        public Response<T> Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Forbidden, resultObject, responseMessages);
-        public Response<T> Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Found, resultObject, responseMessages);
-        public Response<T> Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Gone, resultObject, responseMessages);
-        public Response<T> InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.InternalServerError, resultObject, responseMessages);
-        public Response<T> MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.MethodNotAllowed, resultObject, responseMessages);
-        public Response<T> Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Moved, resultObject, responseMessages);
-        public Response<T> NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.NoContent, resultObject, responseMessages);
-        public Response<T> NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.NotFound, resultObject, responseMessages);
-        public Response<T> Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Processing, resultObject, responseMessages);
-        public Response<T> Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => Custom(TaskCode.Unauthorized, resultObject, responseMessages);
-        public Response<T> Custom<T>(TaskCode taskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
+        public Result<T> Custom<T>(TaskCode taskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = 200;//fix
 
-            return new Response<T>
+            return new Result<T>
             {
                 Entity = resultObject,
                 TaskCode = taskCode,
@@ -207,7 +207,7 @@ namespace Api.Models.ResponseModel
             => Custom(TaskCode.Unauthorized, resultObject, responseMessages);
         public JsonResult Custom<T>(TaskCode TaskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
         {
-            JsonResult result = new(new Response<T>
+            JsonResult result = new(new Result<T>
             {
                 Entity = resultObject,
                 TaskCode = TaskCode,
@@ -223,7 +223,7 @@ namespace Api.Models.ResponseModel
         }
     }
 
-    public class Response<T>
+    public class Result<T>
     {
         [EnumDataType(typeof(TaskCode))]
         [JsonConverter(typeof(StringEnumConverter))]

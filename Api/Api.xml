@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Api</name>
+    </assembly>
+    <members>
+        <member name="T:Api.Controllers.UserController">
+            <summary>
+            Kullanıcı işlemlerini yönetir.
+            </summary>
+        </member>
+        <member name="M:Api.Controllers.UserController.Post(Api.CQRS.Users.Command.CreateUserCommand)">
+            <summary>
+            Yeni Kullanıcı oluştur
+            </summary>
+            <remarks>
+            Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur.
+            </remarks>
+            <param name="command">Oluşturulacak kullanıcının gerekli olan bilgilerini içerir.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

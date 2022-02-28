@@ -1,13 +1,13 @@
-﻿using MongoDB.Bson;
+﻿using Api.ASPNET.Service.Inheritance;
+using Api.Models.ResponseModel.Models;
+using AutoMapper;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.Entities
 {
-    public class BaseEntity
+    public class BaseEntity : IHaveCustomMapping
     {
         [BsonId]
 #pragma warning disable
@@ -20,5 +20,10 @@ namespace Api.Entities
         public DateTime CreateDate { get; set; }
         public int UpdateBy { get; set; }
         public DateTime UpdateDate { get; set; }
+
+        public virtual void CreateMappings(Profile configuration)
+        {
+            configuration.CreateMap<BaseEntity, ResultCreate>();
+        }
     }
 }

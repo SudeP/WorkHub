@@ -10,9 +10,9 @@ namespace Api.Validation.Users
             RuleFor(x => x.UserName)
                 .NotNull()
                 .MinimumLength(5)
-                .MaximumLength(20);
-                //.Matches("reguler expression")
-                //.WithMessage("Kullanıcı adı rakam ve ingiliz alfabesi harfleri içermelidir");
+                .MaximumLength(20)
+                .Matches("reguler expression")
+                .WithMessage("Kullanıcı adı rakam ve ingiliz alfabesi harfleri içermelidir");
 
             //RuleFor(x => x.Email)
             //    .NotNull()
