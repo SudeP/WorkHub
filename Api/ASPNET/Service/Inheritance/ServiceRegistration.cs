@@ -21,7 +21,11 @@ namespace Api
 {
     public static class ServiceRegistration
     {
-        public static void AddApiRegistration(this IServiceCollection services, IConfiguration Configuration)
+        public static void AddValidationCustomaztion(this IServiceCollection services)
+        {
+
+        }
+        public static void AddSwaggerCustomaztion(this IServiceCollection services)
         {
             //@TODO: Swagger'da API açýklamalarý için daha sonrasýnda buraya entegrasyon yapýlacak.
             services.AddSwaggerGen(swagger =>
@@ -64,7 +68,9 @@ namespace Api
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 swagger.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
             });
-
+        }
+        public static void AddApiRegistrationCustomaztion(this IServiceCollection services, IConfiguration Configuration)
+        {
             services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -109,7 +115,7 @@ namespace Api
             services.AddRouting(options => options.LowercaseUrls = true);
         }
 
-        public static void AddDependencies(this IServiceCollection services)
+        public static void AddDependenciesCustomaztion(this IServiceCollection services)
         {
             services.AddScoped<ISession, Session>();
             services.AddScoped<IResponseFactory, ResponseFactory>();
@@ -119,9 +125,7 @@ namespace Api
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-#pragma warning disable
-        public static void AddApplicationRegistration(this IServiceCollection services, IConfiguration Configuration)
-#pragma warning restore
+        public static void AddApplicationRegistrationCustomaztion(this IServiceCollection services)
         {
             var assm = Assembly.GetExecutingAssembly();
 
@@ -133,9 +137,6 @@ namespace Api
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-
-            //services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("SqlHangfireConnection")));
-            //services.AddHangfireServer();
         }
     }
 }

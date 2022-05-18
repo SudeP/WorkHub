@@ -19,8 +19,8 @@ using System.Threading.Tasks;
 
 public interface ISession
 {
-    public int id { get; set; }
-    public ObjectId _id { get; set; }
+    public int Identity { get; set; }
+    public string _id { get; set; }
     public string token { get; set; }
     public void SetToken(string token);
     public string CreateToken(TimeSpan timeSpan);
@@ -33,8 +33,8 @@ public class Session : ISession
         configuration = _configuration;
     }
 
-    public int id { get; set; }
-    public ObjectId _id { get; set; }
+    public int Identity { get; set; }
+    public string _id { get; set; }
     public string token { get; set; }
     private readonly IConfiguration configuration;
 
@@ -48,8 +48,8 @@ public class Session : ISession
         var handler = new JwtSecurityTokenHandler();
         var tokenS = handler.ReadToken(token) as JwtSecurityToken;
 
-        id = int.Parse(tokenS.Claims.First(x => x.Type == nameof(id)).Value);
-        _id = ObjectId.Parse(tokenS.Claims.First(x => x.Type == nameof(_id)).Value);
+        Identity = int.Parse(tokenS.Claims.First(x => x.Type == nameof(Identity)).Value);
+        _id = tokenS.Claims.First(x => x.Type == nameof(_id)).Value;
     }
 
     public string CreateToken(TimeSpan timeSpan)
@@ -60,7 +60,7 @@ public class Session : ISession
 
         List<Claim> claims = new List<Claim>();
 
-        claims.Add(new Claim(nameof(id), id.ToString()));
+        claims.Add(new Claim(nameof(Identity), Identity.ToString()));
         claims.Add(new Claim(nameof(_id), _id.ToString()));
 
         var token = new JwtSecurityToken(
@@ -77,8 +77,8 @@ public class Session : ISession
 
 public interface IIdentityService
 {
-    public Task<int> GenerateNewId<T>();
-    public Task<int> GenerateNewId(string key);
+    public Task<int> GenerateNewIdentity<T>();
+    public Task<int> GenerateNewIdentity(string key);
 }
 
 public class IdentityService : IIdentityService
@@ -89,16 +89,17 @@ public class IdentityService : IIdentityService
         mongo = mongoORM;
     }
 
-    public async Task<int> GenerateNewId<T>()
+    public async Task<int> GenerateNewIdentity<T>()
     {
-        return await GenerateNewId(typeof(T).Name);
+        return await GenerateNewIdentity(typeof(T).Name);
     }
 
-    public async Task<int> GenerateNewId(string key)
+    public async Task<int> GenerateNewIdentity(string key)
     {
         var result = await mongo.FindOneAndUpdateAsync(
             Builders<Identity>.Filter.Eq(x => x.Key, key),
             Builders<Identity>.Update.Inc(x => x.Value, 1),
+            Builders<Identity>.Projection.Combine(),
             isUpsert: true
         );
 

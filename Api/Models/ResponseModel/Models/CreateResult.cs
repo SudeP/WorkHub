@@ -1,10 +1,10 @@
-﻿using MongoDB.Bson;
-
-namespace Api.Models.ResponseModel.Models
+﻿namespace Api.Models.ResponseModel.Models
 {
     public class ResultCreate
     {
-        public int Id { get; set; }
-        public ObjectId _id { get; set; }
+        public int Identity { get; set; }
+#pragma warning disable
+        public string _id { get; set; }
+#pragma warning restore
     }
 }

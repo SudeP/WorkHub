@@ -1,23 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [Produces("application/json")]
-    [ApiController]
-    [ProducesResponseType(StatusCodes.Status200OK)]
 #pragma warning disable
-    public class BaseController : Controller
+    public class BaseController : CoreController
     {
-        //protected readonly HttpContext context;
-        //protected readonly IConfiguration configuration;
-        private IMediator _mediator;
-        protected IMediator mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
     }
 #pragma warning restore
 }

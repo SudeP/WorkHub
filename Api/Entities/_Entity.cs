@@ -7,13 +7,13 @@ using System;
 
 namespace Api.Entities
 {
-    public class BaseEntity : IHaveCustomMapping
+    public class Entity : IHaveCustomMapping
     {
-        [BsonId]
 #pragma warning disable
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
 #pragma warning restore
-        public int Id { get; set; }
+        public int Identity { get; set; }
         public bool IsActive { get; set; }
         public bool IsDelete { get; set; }
         public int CreateBy { get; set; }
@@ -23,7 +23,7 @@ namespace Api.Entities
 
         public virtual void CreateMappings(Profile configuration)
         {
-            configuration.CreateMap<BaseEntity, ResultCreate>();
+            configuration.CreateMap<Entity, ResultCreate>();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Api.ASPNET.Service.Inheritance
             {
                 throw new ValidationException(failures);
             }
+
             return await next();
         }
     }

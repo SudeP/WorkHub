@@ -9,16 +9,23 @@ namespace Api.Validation.Users
         {
             RuleFor(x => x.UserName)
                 .NotNull()
+                .NotEmpty()
                 .MinimumLength(5)
                 .MaximumLength(20)
-                .Matches("reguler expression")
-                .WithMessage("Kullanıcı adı rakam ve ingiliz alfabesi harfleri içermelidir");
+                .Matches(@"[a-zA-ZşıçöüğŞİÇÖÜĞ]*")
+                .Matches(@"^[a-zA-ZşıçöüğŞİÇÖÜĞ ]*$");
 
-            //RuleFor(x => x.Email)
-            //    .NotNull()
-            //    .WithMessage("E-mail adı boş geçilemez !")
-            //    .EmailAddress()
-            //    ;
+            RuleFor(x => x.Password)
+                .NotNull()
+                .NotEmpty()
+                .MinimumLength(8)
+                .MaximumLength(16)
+                .Matches(@"^\S*$");
+
+            RuleFor(x => x.Email)
+                .NotNull()
+                .NotEmpty()
+                .EmailAddress();
         }
     }
 }

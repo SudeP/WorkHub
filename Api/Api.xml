@@ -4,6 +4,21 @@
         <name>Api</name>
     </assembly>
     <members>
+        <member name="T:Api.Controllers.AuthController">
+            <summary>
+            Token işlemlerini yönetir.
+            </summary>
+        </member>
+        <member name="M:Api.Controllers.AuthController.Post(Api.CQRS.Users.Command.SignInUserQuery)">
+            <summary>
+            Token üret
+            </summary>
+            <remarks>
+            Api'yi kullanabilmek için token üretir
+            </remarks>
+            <param name="body">Giriş yapma bilgileri.</param>
+            <returns></returns>
+        </member>
         <member name="T:Api.Controllers.UserController">
             <summary>
             Kullanıcı işlemlerini yönetir.
@@ -16,8 +31,31 @@
             <remarks>
             Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur.
             </remarks>
-            <param name="command">Oluşturulacak kullanıcının gerekli olan bilgilerini içerir.</param>
+            <param name="body">Kullanıcının bilgileri.</param>
             <returns></returns>
+        </member>
+        <member name="T:Api.Controllers.DevelopController">
+            <summary>
+            Test ve bazı basit işlemler için
+            </summary>
+            
+        </member>
+        <member name="M:Api.Controllers.DevelopController.Hello">
+            <summary>
+            Token üret
+            </summary>
+            <remarks>
+            Api'yi kullanabilmek için token üretir
+            </remarks>
+            <param name="command">Giriş yapma bilgileri.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Api.Controllers.DevelopController.Post(Api.CQRS._Develops.Command.MongoMigrationCommand)">
+            <summary>
+            Mongo tablo migration sistemi. Özel
+            </summary>
+            <param name="body">Sistem kullanıcı bilgileri</param>
+            <returns>İşlem başarılı sonucu döner...</returns>
         </member>
     </members>
 </doc>

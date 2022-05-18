@@ -21,27 +21,27 @@ namespace Api.ASPNET.Service.Inheritance
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            _timer.Start();
-            var name = typeof(TRequest).Name;
+            //_timer.Start();
+            //var name = typeof(TRequest).Name;
 
             var response = await next();
-            //_unitOfWork.GetWriteRepository<RequestLogInfo>().Insert(new RequestLogInfo()
+            ////_unitOfWork.GetWriteRepository<RequestLogInfo>().Insert(new RequestLogInfo()
+            ////{
+            ////    Url = name,
+            ////    RequestJson = JsonConvert.SerializeObject(request),
+            ////    ResponseJson = JsonConvert.SerializeObject(response)
+            ////    //CreateBy = !String.IsNullOrEmpty(customerId) ? Convert.ToInt32(customerId) : 0
+            ////});
+
+            //_timer.Stop();
+
+            //if (_timer.ElapsedMilliseconds > 60000)
             //{
-            //    Url = name,
-            //    RequestJson = JsonConvert.SerializeObject(request),
-            //    ResponseJson = JsonConvert.SerializeObject(response)
-            //    //CreateBy = !String.IsNullOrEmpty(customerId) ? Convert.ToInt32(customerId) : 0
-            //});
+            //    //var name = typeof(TRequest).Name;
 
-            _timer.Stop();
-
-            if (_timer.ElapsedMilliseconds > 60000)
-            {
-                //var name = typeof(TRequest).Name;
-
-                // TODO: Add User Details 
-                _logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}", name, _timer.ElapsedMilliseconds, request);
-            }
+            //    // TODO: Add User Details 
+            //    _logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}", name, _timer.ElapsedMilliseconds, request);
+            //}
 
             return response;
         }

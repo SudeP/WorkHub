@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 namespace Api.Controllers
 {
     /// <summary>
-    /// Kullanıcı işlemlerini yönetir.
+    /// Token işlemlerini yönetir.
     /// </summary>
-    public class UserController : BaseController
+    public class AuthController : CoreController
     {
         /// <summary>
-        /// Yeni Kullanıcı oluştur
+        /// Token üret
         /// </summary>
         /// <remarks>
-        /// Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur.
+        /// Api'yi kullanabilmek için token üretir
         /// </remarks>
-        /// <param name="body">Kullanıcının bilgileri.</param>
+        /// <param name="body">Giriş yapma bilgileri.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<Result<ResultCreate>> Post([FromBody] CreateUserCommand body)
+        public async Task<Result<string>> Post([FromBody] SignInUserQuery body)
         {
             return await mediator.Send(body);
         }

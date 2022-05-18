@@ -15,31 +15,42 @@ namespace Api.ASPNET
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
         }
 
+        private const bool enableSwagger = true;
+
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            services.AddApiRegistration(Configuration);
+            #region Service Customaztions
 
-            services.AddApplicationRegistration(Configuration);
+            services.AddValidationCustomaztion();
 
-            services.AddDependencies();
+            if (enableSwagger)
+                services.AddSwaggerCustomaztion();
+
+            services.AddApiRegistrationCustomaztion(Configuration);
+
+            services.AddApplicationRegistrationCustomaztion();
+
+            services.AddDependenciesCustomaztion();
+
+            #endregion
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory log)
         {
             if (env.EnvironmentName == "PreProduction")
             {
                 app.UseDeveloperExceptionPage();
             }
-            if (env.EnvironmentName == "PreProduction")
+
+            if (enableSwagger)
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
@@ -67,7 +78,6 @@ namespace Api.ASPNET
 
         private RequestDelegate OnHandleRequestDelegate(RequestDelegate requestDelegate)
         {
-
             return requestDelegate;
         }
 
@@ -75,11 +85,15 @@ namespace Api.ASPNET
         {
             ISession session = context.GetSession();
 
-            session.SetToken(
-                context.Request.Headers["Authorization"] != ""
-                ? context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "")
-                : ""
-            );
+            string auth = context.Request.Headers["Authorization"];
+
+            if (!string.IsNullOrEmpty(auth) && !string.IsNullOrWhiteSpace(auth))
+            {
+                auth = auth.Replace("Bearer", "").Trim();
+
+                if (auth.Length > 0)
+                    session.SetToken(auth);
+            }
 
             await next();
         }

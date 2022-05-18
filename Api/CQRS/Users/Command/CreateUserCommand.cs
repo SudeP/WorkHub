@@ -6,7 +6,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,10 +19,7 @@ namespace Api.CQRS.Users.Command
     {
         [Required] public string UserName { get; set; }
         [Required] public string Password { get; set; }
-        [Required] public string GivenName { get; set; }
-        [Required] public string LastName { get; set; }
         [Required] public string Email { get; set; }
-        public string Phone { get; set; }
 
         public class Handler : IRequestHandler<CreateUserCommand, Result<ResultCreate>>
         {
@@ -50,20 +49,32 @@ namespace Api.CQRS.Users.Command
             {
                 User entity = map.Map<User>(request);
 
-                entity.Id = await identity.GenerateNewId<User>();
-                entity._id = ObjectId.GenerateNewId();
+                var filter = Builders<User>.Filter;
+
+                var exists = mongo.FindAsync(
+                    filter.Eq(x => x.Email, request.Email),
+                    Builders<User>.Projection.Combine(),
+                    cancellationToken: cancellationToken);
+
+                if (!Equals(exists, null))
+                    return await response.BadRequest<ResultCreate>(responseMessages: new List<ResponseMessage>
+                    {
+                        new ResponseMessage { Message = "This email exists already" }
+                    });
+
+                entity.Identity = await identity.GenerateNewIdentity<User>();
+                entity._id = ObjectId.GenerateNewId().ToString();
                 entity.IsActive = true;
                 entity.IsDelete = false;
+                entity.IsApproved = false;
                 entity.CreateDate = DateTime.Now;
-                entity.CreateBy = session.userId;
+                entity.CreateBy = session.Identity;
 
                 var successfully = await mongo.InsertOneAsync(entity, cancellationToken: cancellationToken);
 
-                var result = successfully
+                return await (successfully
                     ? response.Created(map.Map<ResultCreate>(entity))
-                    : response.InternalServerError<ResultCreate>();
-
-                return await Task.FromResult(result).ConfigureAwait(false);
+                    : response.InternalServerError<ResultCreate>());
             }
         }
     }
