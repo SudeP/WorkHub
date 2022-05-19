@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Api.Models.Structs;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Api.Models.Entities.Identities

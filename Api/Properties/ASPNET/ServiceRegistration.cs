@@ -14,7 +14,9 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Serilog;
-using Api.Models.Tools;
+using Api.Models.Structs;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Api.Properties.ASPNET
 {
@@ -64,6 +66,7 @@ namespace Api.Properties.ASPNET
                 swagger.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), true);
             });
         }
+
         public static void AddApiRegistrationCustomaztion(this IServiceCollection services, IConfiguration Configuration)
         {
             Log.Logger = new LoggerConfiguration()
@@ -137,6 +140,22 @@ namespace Api.Properties.ASPNET
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+        }
+
+        public class HelperDateTime
+        {
+            public class DateTimeConverter : JsonConverter<DateTime>
+            {
+                public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+                {
+                    return DateTime.Parse(reader.GetString());
+                }
+
+                public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+                {
+                    writer.WriteStringValue(value.ToUniversalTime().ToLocalTime().ToString("dd-MM-yyyyTHH:mm:ss"));
+                }
+            }
         }
     }
 }

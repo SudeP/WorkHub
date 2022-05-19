@@ -1,11 +1,10 @@
 ﻿using Api.Models.ResponseModel.Models;
-using Api.Models.Tools;
 using AutoMapper;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 
-namespace Api.Models.Entities
+namespace Api.Models.Structs
 {
     public class Entity : IHaveCustomMapping
     {

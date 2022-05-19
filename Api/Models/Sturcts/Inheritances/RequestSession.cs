@@ -3,6 +3,7 @@ using Api.Models.Entities.Identities;
 using Api.Models.ORM;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -17,7 +18,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Models.Tools
+namespace Api.Models.Structs
 {
     public class RequestSession : IRequestSession
     {
@@ -65,6 +66,20 @@ namespace Api.Models.Tools
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
+    public static class RequestSessionExtensions
+    {
+        public static RequestSession GetSession(this IDictionary<object, object?> items)
+        {
+            items.TryGetValue("currentSession", out object value);
+
+            return (RequestSession)value;
+        }
+
+        public static IRequestSession GetSession(this Microsoft.AspNetCore.Http.HttpContext httpContext)
+        {
+            return httpContext.RequestServices.GetService<IRequestSession>();
         }
     }
 }

@@ -4,7 +4,6 @@ using Api.Models.ResponseModel.Models;
 using Api.Models.ORM;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -12,7 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using Api.Models.Tools;
+using Api.Models.Structs;
 
 namespace Api.Controllers.CQRS.Users.Command
 {
@@ -45,8 +44,10 @@ namespace Api.Controllers.CQRS.Users.Command
 
             public async Task<Result<ResultCreate>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
             {
+                //request object map to User
                 User entity = map.Map<User>(request);
 
+                #region Control Email exists
                 var filter = Builders<User>.Filter;
 
                 var exists = mongo.FindAsync(
@@ -59,6 +60,7 @@ namespace Api.Controllers.CQRS.Users.Command
                     {
                         new ResponseMessage { Message = "This email exists already" }
                     });
+                #endregion
 
                 entity.Identity = await identity.GenerateNewIdentity<User>();
                 entity._id = ObjectId.GenerateNewId().ToString();
@@ -69,6 +71,8 @@ namespace Api.Controllers.CQRS.Users.Command
                 entity.CreateBy = session.Identity;
 
                 var successfully = await mongo.InsertOneAsync(entity, cancellationToken: cancellationToken);
+
+                //BURADA MAİL AT
 
                 return await (successfully
                     ? response.Created(map.Map<ResultCreate>(entity))

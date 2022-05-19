@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Api.Models.Entities;
+using Api.Models.Structs;
 
 namespace Api.Controllers.CQRS._Develops.Command
 {

@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Models.Tools
+namespace Api.Models.Structs
 {
     public class IdentityService : IIdentityService
     {

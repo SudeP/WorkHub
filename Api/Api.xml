@@ -9,7 +9,7 @@
             Token işlemlerini yönetir.
             </summary>
         </member>
-        <member name="M:Api.Controllers.AuthController.Post(Api.CQRS.Users.Command.SignInUserQuery)">
+        <member name="M:Api.Controllers.AuthController.Post(Api.Controllers.CQRS.Users.Command.SignInUserQuery)">
             <summary>
             Token üret
             </summary>
@@ -19,12 +19,17 @@
             <param name="body">Giriş yapma bilgileri.</param>
             <returns></returns>
         </member>
+        <member name="T:Api.Controllers.OutSourceController">
+            <summary>
+            Kullanıcı işlemlerini yönetir.
+            </summary>
+        </member>
         <member name="T:Api.Controllers.UserController">
             <summary>
             Kullanıcı işlemlerini yönetir.
             </summary>
         </member>
-        <member name="M:Api.Controllers.UserController.Post(Api.CQRS.Users.Command.CreateUserCommand)">
+        <member name="M:Api.Controllers.UserController.Post(Api.Controllers.CQRS.Users.Command.CreateUserCommand)">
             <summary>
             Yeni Kullanıcı oluştur
             </summary>
@@ -50,7 +55,7 @@
             <param name="command">Giriş yapma bilgileri.</param>
             <returns></returns>
         </member>
-        <member name="M:Api.Controllers.DevelopController.Post(Api.CQRS._Develops.Command.MongoMigrationCommand)">
+        <member name="M:Api.Controllers.DevelopController.Post(Api.Controllers.CQRS._Develops.Command.MongoMigrationCommand)">
             <summary>
             Mongo tablo migration sistemi. Özel
             </summary>

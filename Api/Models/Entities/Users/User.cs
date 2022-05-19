@@ -1,4 +1,5 @@
 ﻿using Api.Controllers.CQRS.Users.Command;
+using Api.Models.Structs;
 using AutoMapper;
 
 namespace Api.Models.Entities.Users

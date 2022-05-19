@@ -17,15 +17,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Api.Models.Tools
+namespace Api.Models.Structs
 {
-    public interface IRequestSession
+    public interface IIdentityService
     {
-        public int Identity { get; set; }
-        public string _id { get; set; }
-        public string token { get; set; }
-        public void SetToken(string token);
-        public string CreateToken(TimeSpan timeSpan);
+        public Task<int> GenerateNewIdentity<T>();
+        public Task<int> GenerateNewIdentity(string key);
     }
 }
 #pragma warning restore

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Api.Models.Tools;
+using Api.Models.Structs;
 
 namespace Api.Controllers.CQRS.Users.Command
 {

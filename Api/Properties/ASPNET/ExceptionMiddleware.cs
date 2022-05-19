@@ -1,5 +1,6 @@
 ﻿using Api.Models.ResponseModel;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -25,7 +26,18 @@ namespace Api.Properties.ASPNET
 
             if (ex is ValidationException vex)
             {
-                context.Result = new JsonResult(response.InternalServerError<object>(responseMessages: vex.Errors.Serialize()));
+                List<ResponseMessage> messages = new();
+
+                foreach (ValidationFailure error in vex.Errors)
+                {
+                    messages.Add(new ResponseMessage
+                    {
+                        Message = error.ErrorMessage,
+                        StackTrace = error.Severity.ToString()
+                    });
+                }
+
+                context.Result = new JsonResult(response.InternalServerError<object>(responseMessages: messages));
             }
             else
             {
