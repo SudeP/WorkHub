@@ -1,4 +1,4 @@
-﻿using Api.CQRS._Develops.Command;
+﻿using Api.Controllers.CQRS._Develops.Command;
 using Api.Models.ResponseModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

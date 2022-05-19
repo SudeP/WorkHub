@@ -1,6 +1,5 @@
-﻿using Api.CQRS.Users.Command;
+﻿using Api.Controllers.CQRS.Users.Command;
 using Api.Models.ResponseModel;
-using Api.Models.ResponseModel.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
