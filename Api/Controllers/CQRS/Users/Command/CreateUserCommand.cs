@@ -55,11 +55,8 @@ namespace Api.Controllers.CQRS.Users.Command
                     Builders<User>.Projection.Combine(),
                     cancellationToken: cancellationToken);
 
-                if (!Equals(exists, null))
-                    return await response.BadRequest<ResultCreate>(responseMessages: new List<ResponseMessage>
-                    {
-                        new ResponseMessage { Message = "This email exists already" }
-                    });
+                //if (!Equals(exists, null))
+                    //return await response.BadRequest("This email exists already");
                 #endregion
 
                 entity.Identity = await identity.GenerateNewIdentity<User>();

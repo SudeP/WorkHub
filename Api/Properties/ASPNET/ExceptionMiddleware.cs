@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Api.Properties.ASPNET
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ExceptionMiddleware : ExceptionFilterAttribute
+    public sealed class ExceptionMiddleware : ExceptionFilterAttribute
     {
         private readonly IResponseFactory response;
 

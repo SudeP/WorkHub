@@ -59,7 +59,7 @@ namespace Api.Controllers.CQRS.Users.Command
                     cancellationToken: cancellationToken
                 );
 
-                var entity = task.Item1.FirstOrDefault();
+                var entity = task.Entity.FirstOrDefault();
 
                 if (Equals(entity, null))
                     return await response.NotFound(string.Empty);

@@ -57,7 +57,7 @@ namespace Api.Properties.ASPNET
                                 Id = "Bearer"
                             }
                         },
-                        System.Array.Empty<string>()
+                        Array.Empty<string>()
                     }
                 });
 

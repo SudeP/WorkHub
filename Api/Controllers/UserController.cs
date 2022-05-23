@@ -13,16 +13,30 @@ namespace Api.Controllers
     public class UserController : BaseController
     {
         /// <summary>
-        /// Yeni Kullanıcı oluştur
+        /// Kullanıcı oluştur
         /// </summary>
         /// <remarks>
-        /// Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur.
+        /// Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur
         /// </remarks>
-        /// <param name="body">Kullanıcının bilgileri.</param>
+        /// <param name="body">Kullanıcının bilgileri</param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<Result<ResultCreate>> Post([FromBody] CreateUserCommand body)
+        {
+            return await mediator.Send(body);
+        }
+        /// <summary>
+        /// Kullanıcı güncelle
+        /// </summary>
+        /// <remarks>
+        /// Kullanıcı bilgilerini günceller
+        /// </remarks>
+        /// <param name="body">Kullanıcının bilgileri</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPut]
+        public async Task<Result<bool>> Put([FromBody] UpdateUserCommand body)
         {
             return await mediator.Send(body);
         }

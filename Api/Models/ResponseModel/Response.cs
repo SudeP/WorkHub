@@ -104,8 +104,45 @@ namespace Api.Models.ResponseModel
         {
             context = httpContextAccessor.HttpContext;
         }
-
         private readonly HttpContext context;
+        public async Task<Result<object>> OK(string message)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { new ResponseMessage { Message = message } });
+        public async Task<Result<object>> Accepted(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> BadRequest(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Conflict(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Continue(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Created(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> UnprocessableEntity(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> ExpectationFailed(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Forbidden(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Found(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Gone(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> InternalServerError(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> MethodNotAllowed(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Moved(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> NoContent(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> NotFound(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Processing(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Unauthorized(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
+        public async Task<Result<object>> Custom(ResponseMessage responseMessage)
+            => await Custom<object>(TaskCode.OK, null, new List<ResponseMessage> { responseMessage });
         public async Task<Result<T>> OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
             => await Custom(TaskCode.OK, resultObject, responseMessages);
         public async Task<Result<T>> Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
@@ -155,146 +192,4 @@ namespace Api.Models.ResponseModel
             });
         }
     }
-
-    //public class ResponseFactory : IResponseFactory
-    //{
-    //    public ResponseFactory(IHttpContextAccessor httpContextAccessor)
-    //    {
-    //        context = httpContextAccessor.HttpContext;
-    //    }
-
-    //    private readonly HttpContext context;
-    //    public Result<T> OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.OK, resultObject, responseMessages);
-    //    public Result<T> Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Accepted, resultObject, responseMessages);
-    //    public Result<T> BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.BadRequest, resultObject, responseMessages);
-    //    public Result<T> Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Conflict, resultObject, responseMessages);
-    //    public Result<T> Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Continue, resultObject, responseMessages);
-    //    public Result<T> Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Created, resultObject, responseMessages);
-    //    public Result<T> UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.UnprocessableEntity, resultObject, responseMessages);
-    //    public Result<T> ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.ExpectationFailed, resultObject, responseMessages);
-    //    public Result<T> Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Forbidden, resultObject, responseMessages);
-    //    public Result<T> Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Found, resultObject, responseMessages);
-    //    public Result<T> Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Gone, resultObject, responseMessages);
-    //    public Result<T> InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.InternalServerError, resultObject, responseMessages);
-    //    public Result<T> MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.MethodNotAllowed, resultObject, responseMessages);
-    //    public Result<T> Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Moved, resultObject, responseMessages);
-    //    public Result<T> NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.NoContent, resultObject, responseMessages);
-    //    public Result<T> NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.NotFound, resultObject, responseMessages);
-    //    public Result<T> Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Processing, resultObject, responseMessages);
-    //    public Result<T> Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Unauthorized, resultObject, responseMessages);
-    //    public Result<T> Custom<T>(TaskCode taskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //    {
-    //        context.Response.ContentType = "application/json";
-    //        context.Response.StatusCode = 200;//fix
-
-    //        return new Result<T>
-    //        {
-    //            Entity = resultObject,
-    //            TaskCode = taskCode,
-    //            Messages = responseMessages
-    //        };
-    //    }
-    //}
-    //public interface IJsonResultFactory
-    //{
-    //    public JsonResult OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //    public JsonResult Custom<T>(TaskCode TaskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null);
-    //}
-    //public class JsonResultFactory : IJsonResultFactory
-    //{
-    //    public JsonResultFactory(IHttpContextAccessor httpContextAccessor)
-    //    {
-    //        context = httpContextAccessor.HttpContext;
-    //    }
-
-    //    private readonly HttpContext context;
-
-    //    public JsonResult OK<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.OK, resultObject, responseMessages);
-    //    public JsonResult Accepted<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Accepted, resultObject, responseMessages);
-    //    public JsonResult BadRequest<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.BadRequest, resultObject, responseMessages);
-    //    public JsonResult Conflict<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Conflict, resultObject, responseMessages);
-    //    public JsonResult Continue<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Continue, resultObject, responseMessages);
-    //    public JsonResult Created<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Created, resultObject, responseMessages);
-    //    public JsonResult UnprocessableEntity<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.UnprocessableEntity, resultObject, responseMessages);
-    //    public JsonResult ExpectationFailed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.ExpectationFailed, resultObject, responseMessages);
-    //    public JsonResult Forbidden<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Forbidden, resultObject, responseMessages);
-    //    public JsonResult Found<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Found, resultObject, responseMessages);
-    //    public JsonResult Gone<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Gone, resultObject, responseMessages);
-    //    public JsonResult InternalServerError<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.InternalServerError, resultObject, responseMessages);
-    //    public JsonResult MethodNotAllowed<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.MethodNotAllowed, resultObject, responseMessages);
-    //    public JsonResult Moved<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Moved, resultObject, responseMessages);
-    //    public JsonResult NoContent<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.NoContent, resultObject, responseMessages);
-    //    public JsonResult NotFound<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.NotFound, resultObject, responseMessages);
-    //    public JsonResult Processing<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Processing, resultObject, responseMessages);
-    //    public JsonResult Unauthorized<T>(T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //        => Custom(TaskCode.Unauthorized, resultObject, responseMessages);
-    //    public JsonResult Custom<T>(TaskCode TaskCode, T resultObject = default, IEnumerable<ResponseMessage> responseMessages = null)
-    //    {
-    //        JsonResult result = new(new Result<T>
-    //        {
-    //            Entity = resultObject,
-    //            TaskCode = TaskCode,
-    //            Messages = responseMessages
-    //        });
-
-    //        context.Response.ContentType = "application/json";
-    //        context.Response.StatusCode = (int)TaskCode;
-    //        result.ContentType = "application/json";
-    //        result.StatusCode = (int)TaskCode;
-
-    //        return result;
-    //    }
-    //}
 }

@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.Models.ORM
 {
+    public record MongoResult<T>(T Entity, bool Successfully);
+
     public interface IMongoORM
     {
 #pragma warning disable
@@ -17,7 +18,7 @@ namespace Api.Models.ORM
             Entity entity,
             bool? bypassDocumentValidation = null,
             CancellationToken cancellationToken = default);
-        public Task<(IEnumerable<Entity>, bool)> FindAsync<Entity>(
+        public Task<MongoResult<IEnumerable<Entity>>> FindAsync<Entity>(
             FilterDefinition<Entity> filter,
             ProjectionDefinition<Entity> projection = null,
             Collation collation = null,
@@ -25,14 +26,14 @@ namespace Api.Models.ORM
             int? skip = null,
             SortDefinition<Entity> sort = null,
             CancellationToken cancellationToken = default);
-        public Task<(UpdateResult, bool)> UpdateOneAsync<Entity>(
+        public Task<MongoResult<UpdateResult>> UpdateOneAsync<Entity>(
             FilterDefinition<Entity> filter,
             UpdateDefinition<Entity> updateDefinition,
             bool? bypassDocumentValidation = null,
             Collation collation = null,
             bool isUpsert = false,
             CancellationToken cancellationToken = default);
-        public Task<(Entity, bool)> FindOneAndUpdateAsync<Entity>(
+        public Task<MongoResult<Entity>> FindOneAndUpdateAsync<Entity>(
             FilterDefinition<Entity> filter,
             UpdateDefinition<Entity> updateDefinition,
             ProjectionDefinition<Entity> projection = null,
@@ -41,11 +42,13 @@ namespace Api.Models.ORM
             Collation collation = null,
             bool isUpsert = false,
             CancellationToken cancellationToken = default);
-        public Task<(DeleteResult, bool)> Remove<Entity>(
+        public Task<MongoResult<DeleteResult>> Remove<Entity>(
             FilterDefinition<Entity> filter,
             Collation collation = null,
             CancellationToken cancellationToken = default);
     }
+
+
     public class MongoORM : IMongoORM
     {
         public MongoORM(IConfiguration configuration)
@@ -79,10 +82,10 @@ namespace Api.Models.ORM
 
             await task;
 
-            return (task.IsCompletedSuccessfully);
+            return task.IsCompletedSuccessfully;
         }
 
-        public async Task<(IEnumerable<Entity>, bool)> FindAsync<Entity>(
+        public async Task<MongoResult<IEnumerable<Entity>>> FindAsync<Entity>(
             FilterDefinition<Entity> filter,
             ProjectionDefinition<Entity> projection = null,
             Collation collation = null,
@@ -104,10 +107,10 @@ namespace Api.Models.ORM
 
             await task;
 
-            return (await task.Result.ToListAsync(cancellationToken), task.IsCompletedSuccessfully);
+            return new MongoResult<IEnumerable<Entity>>(await task.Result.ToListAsync(cancellationToken), task.IsCompletedSuccessfully);
         }
 
-        public async Task<(UpdateResult, bool)> UpdateOneAsync<Entity>(
+        public async Task<MongoResult<UpdateResult>> UpdateOneAsync<Entity>(
             FilterDefinition<Entity> filter,
             UpdateDefinition<Entity> updateDefinition,
             bool? bypassDocumentValidation = null,
@@ -126,12 +129,12 @@ namespace Api.Models.ORM
 
             await task;
 
-            return (task.Result, task.IsCompletedSuccessfully);
+            return new MongoResult<UpdateResult>(task.Result, task.IsCompletedSuccessfully);
         }
 
 
 
-        public async Task<(Entity, bool)> FindOneAndUpdateAsync<Entity>(
+        public async Task<MongoResult<Entity>> FindOneAndUpdateAsync<Entity>(
             FilterDefinition<Entity> filter,
             UpdateDefinition<Entity> updateDefinition,
             ProjectionDefinition<Entity> projection = null,
@@ -154,10 +157,10 @@ namespace Api.Models.ORM
 
             await task;
 
-            return (task.Result, task.IsCompletedSuccessfully);
+            return new MongoResult<Entity>(task.Result, task.IsCompletedSuccessfully);
         }
 
-        public async Task<(DeleteResult, bool)> Remove<Entity>(
+        public async Task<MongoResult<DeleteResult>> Remove<Entity>(
             FilterDefinition<Entity> filter,
             Collation collation = null,
             CancellationToken cancellationToken = default)
@@ -171,7 +174,7 @@ namespace Api.Models.ORM
 
             await task;
 
-            return (task.Result, task.IsCompletedSuccessfully);
+            return new MongoResult<DeleteResult>(task.Result, task.IsCompletedSuccessfully);
         }
     }
 }

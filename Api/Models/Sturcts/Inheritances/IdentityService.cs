@@ -41,7 +41,7 @@ namespace Api.Models.Structs
                 isUpsert: true
             );
 
-            return result.Item1.Value;
+            return result.Entity.Value;
         }
     }
 }
