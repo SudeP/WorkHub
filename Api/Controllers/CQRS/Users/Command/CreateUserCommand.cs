@@ -12,6 +12,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Models.Structs;
+using System.Net;
+using Api.Models.Sturcts.Inheritances;
 
 namespace Api.Controllers.CQRS.Users.Command
 {
@@ -21,28 +23,25 @@ namespace Api.Controllers.CQRS.Users.Command
         [Required] public string Password { get; set; }
         [Required] public string Email { get; set; }
 
-        public class Handler : IRequestHandler<CreateUserCommand, Result<ResultCreate>>
+        public class Handler : RequestMiddlewareHandler<CreateUserCommand, Result<ResultCreate>>
         {
-            protected readonly IResponseFactory response;
             protected readonly IRequestSession session;
             protected readonly IMongoORM mongo;
             protected readonly IIdentityService identity;
             protected readonly IMapper map;
             public Handler(
-                IResponseFactory responseFactory,
                 IRequestSession currentSession,
                 IMongoORM mongoORM,
                 IIdentityService identityService,
                 IMapper mapper)
             {
-                response = responseFactory;
                 session = currentSession;
                 mongo = mongoORM;
                 identity = identityService;
                 map = mapper;
             }
 
-            public async Task<Result<ResultCreate>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+            public override async Task<Result<ResultCreate>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
             {
                 //request object map to User
                 User entity = map.Map<User>(request);
@@ -56,7 +55,7 @@ namespace Api.Controllers.CQRS.Users.Command
                     cancellationToken: cancellationToken);
 
                 //if (!Equals(exists, null))
-                    //return await response.BadRequest("This email exists already");
+                //return await response.BadRequest("This email exists already");
                 #endregion
 
                 entity.Identity = await identity.GenerateNewIdentity<User>();
@@ -72,8 +71,8 @@ namespace Api.Controllers.CQRS.Users.Command
                 //BURADA MAİL AT
 
                 return await (successfully
-                    ? response.Created(map.Map<ResultCreate>(entity))
-                    : response.InternalServerError<ResultCreate>());
+                    ? Custom(HttpStatusCode.Created, map.Map<ResultCreate>(entity))
+                    : Custom<ResultCreate>(HttpStatusCode.InternalServerError));
             }
         }
     }

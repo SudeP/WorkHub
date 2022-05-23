@@ -121,7 +121,6 @@ namespace Api.Properties.ASPNET
         public static void AddDependenciesCustomaztion(this IServiceCollection services)
         {
             services.AddScoped<IRequestSession, RequestSession>();
-            services.AddScoped<IResponseFactory, ResponseFactory>();
             services.AddScoped<IMongoORM, MongoORM>();
 
             services.AddSingleton<IIdentityService, IdentityService>();

@@ -3,55 +3,33 @@ using Api.Models.ResponseModel;
 using Api.Models.ORM;
 using AutoMapper;
 using MediatR;
-using MongoDB.Bson;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Models.Structs;
 using MongoDB.Driver;
+using Api.Models.ResponseModel.Models;
+using Api.Models.Sturcts.Inheritances;
+using Newtonsoft.Json;
 
 namespace Api.Controllers.CQRS.Users.Command
 {
-    public class UpdateUserCommand : IRequest<Result<bool>>
+    public class UpdateUserCommand : IRequest<Result<ResultUpdate>>
     {
+        [JsonIgnore] public IRequestSession Session { get; set; }
+        [JsonIgnore] public IMongoORM Mongo { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
 
-        public class Handler : IRequestHandler<UpdateUserCommand, Result<bool>>
+        public class Handler : RequestMiddlewareHandler<UpdateUserCommand, Result<ResultUpdate>>
         {
-            protected readonly IResponseFactory response;
-            protected readonly IRequestSession session;
-            protected readonly IMongoORM mongo;
-            protected readonly IIdentityService identity;
-            protected readonly IMapper map;
-            public Handler(
-                IResponseFactory responseFactory,
-                IRequestSession currentSession,
-                IMongoORM mongoORM,
-                IIdentityService identityService,
-                IMapper mapper)
+            public override async Task<Result<ResultUpdate>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
             {
-                response = responseFactory;
-                session = currentSession;
-                mongo = mongoORM;
-                identity = identityService;
-                map = mapper;
-            }
+                var entity = await request.Mongo.FindOneAndUpdateAsync(
+                   Builders<User>.Filter.Eq(x => x._id, request.Session._id),
+                   Builders<User>.Update.Set(x => x.UserName, request.UserName),
+                   Builders<User>.Projection.Combine(),
+                   cancellationToken: cancellationToken);
 
-            public async Task<Result<bool>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
-            {
-                FilterDefinitionBuilder<User> filter = Builders<User>.Filter;
-
-                var mongoResult = await mongo.FindAsync(
-                    filter.Eq(x => x._id, session._id),
-                    Builders<User>.Projection.Combine(),
-                    cancellationToken: cancellationToken);
-
-                //if (!mongoResult.Successfully)
-                //    return await response.BadRequest
-
-                return await response.OK(true);
+                return null;
             }
         }
     }

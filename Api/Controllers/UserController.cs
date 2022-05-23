@@ -3,12 +3,13 @@ using Api.Models.ResponseModel;
 using Api.Models.ResponseModel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
     /// <summary>
-    /// Kullanıcı işlemlerini yönetir.
+    /// Kullanıcı işlemlerini yönetir
     /// </summary>
     public class UserController : BaseController
     {
@@ -26,19 +27,17 @@ namespace Api.Controllers
         {
             return await mediator.Send(body);
         }
+
         /// <summary>
         /// Kullanıcı güncelle
         /// </summary>
         /// <remarks>
-        /// Kullanıcı bilgilerini günceller
+        /// Belirtilen tekil bilgi ile kullanıcının verilerini günceller
         /// </remarks>
         /// <param name="body">Kullanıcının bilgileri</param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPut]
-        public async Task<Result<bool>> Put([FromBody] UpdateUserCommand body)
-        {
-            return await mediator.Send(body);
-        }
+        public async Task<Result<ResultUpdate>> Put([FromBody] UpdateUserCommand body) => await mediator.Send(FillServices(body));
     }
 }

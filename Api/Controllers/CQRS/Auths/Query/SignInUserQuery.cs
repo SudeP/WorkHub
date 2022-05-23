@@ -11,47 +11,42 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Models.Structs;
+using System.Net;
+using Api.Models.Sturcts.Inheritances;
 
 namespace Api.Controllers.CQRS.Users.Command
 {
     public class SignInUserQuery : IRequest<Result<string>>
     {
         public string Email { get; set; }
-        public string UserName { get; set; }
         [Required] public string Password { get; set; }
 
-        public class Handler : IRequestHandler<SignInUserQuery, Result<string>>
+        public class Handler : RequestMiddlewareHandler<SignInUserQuery, Result<string>>
         {
             protected readonly HttpContext context;
-            protected readonly IResponseFactory response;
             protected readonly IRequestSession session;
             protected readonly IMongoORM mongo;
             protected readonly IMapper map;
             public Handler(
                 IHttpContextAccessor httpContextAccessor,
-                IResponseFactory responseFactory,
                 IRequestSession currentSession,
                 IMongoORM mongoORM,
                 IMapper mapper)
             {
                 context = httpContextAccessor.HttpContext;
-                response = responseFactory;
                 session = currentSession;
                 mongo = mongoORM;
                 map = mapper;
             }
 
-            public async Task<Result<string>> Handle(SignInUserQuery request, CancellationToken cancellationToken)
+            public override async Task<Result<string>> Handle(SignInUserQuery request, CancellationToken cancellationToken)
             {
                 var filter = Builders<User>.Filter;
 
                 var task = await mongo.FindAsync(
                     filter.And(
+                        filter.Eq(x => x.Email, request.Email),
                         filter.Eq(x => x.Password, request.Password),
-                        filter.Or(
-                            filter.Eq(x => x.Email, request.Email),
-                            filter.Eq(x => x.UserName, request.UserName)
-                        ),
                         filter.Eq(x => x.IsActive, true),
                         filter.Eq(x => x.IsDelete, false)
                     ),
@@ -62,7 +57,7 @@ namespace Api.Controllers.CQRS.Users.Command
                 var entity = task.Entity.FirstOrDefault();
 
                 if (Equals(entity, null))
-                    return await response.NotFound(string.Empty);
+                    return await Custom(HttpStatusCode.NotFound, string.Empty);
 
                 session.Identity = entity.Identity;
                 session._id = entity._id;
@@ -74,7 +69,7 @@ namespace Api.Controllers.CQRS.Users.Command
                 context.Response.Headers.Remove("Access-Control-Expose-Headers");
                 context.Response.Headers.Add("Access-Control-Expose-Headers", "Authorization");
 
-                return await response.Created(createdToken);
+                return await Custom(HttpStatusCode.Created, createdToken);
             }
         }
     }

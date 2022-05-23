@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace Api.Controllers
 {
@@ -14,6 +15,18 @@ namespace Api.Controllers
     {
         private IMediator _mediator;
         protected IMediator mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
+
+        protected IRequest<T> FillServices<T>(IRequest<T> obj)
+        {
+            obj
+                .GetType()
+                .GetProperties()
+                .Where(x => x.PropertyType.IsInterface)
+                .ToList()
+                .ForEach(x => x.SetValue(obj, HttpContext.RequestServices.GetService(x.PropertyType)));
+
+            return obj;
+        }
     }
 #pragma warning restore
 }

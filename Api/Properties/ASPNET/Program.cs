@@ -80,6 +80,9 @@ namespace Api.Properties.ASPNET
 
         private async Task OnHandleHttpContext(HttpContext context, Func<Task> next)
         {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = 200;//standart// dont edit // okay ? bra.. naked. mmmmh
+
             IRequestSession session = context.GetSession();
 
             string auth = context.Request.Headers["Authorization"];

@@ -11,13 +11,6 @@ namespace Api.Properties.ASPNET
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class ExceptionMiddleware : ExceptionFilterAttribute
     {
-        private readonly IResponseFactory response;
-
-        public ExceptionMiddleware(IResponseFactory responseFactory)
-        {
-            response = responseFactory;
-        }
-
         public override void OnException(ExceptionContext context)
         {
             context.ExceptionHandled = true;
@@ -26,29 +19,33 @@ namespace Api.Properties.ASPNET
 
             if (ex is ValidationException vex)
             {
-                List<ResponseMessage> messages = new();
+                List<Information> messages = new();
 
                 foreach (ValidationFailure error in vex.Errors)
                 {
-                    messages.Add(new ResponseMessage
+                    messages.Add(new Information
                     {
                         Message = error.ErrorMessage,
-                        StackTrace = error.Severity.ToString()
+                        Detail = error.Severity.ToString()
                     });
                 }
 
-                context.Result = new JsonResult(response.InternalServerError<object>(responseMessages: messages));
+                context.Result = new JsonResult(new Result<object> { Status = System.Net.HttpStatusCode.InternalServerError, Infos = messages });
             }
             else
             {
-                context.Result = new JsonResult(response.InternalServerError<object>(responseMessages: new List<ResponseMessage>
+                context.Result = new JsonResult(new Result<object>
                 {
-                    new ResponseMessage
+                    Status = System.Net.HttpStatusCode.InternalServerError,
+                    Infos = new List<Information>
                     {
-                        Message = context.Exception.Message,
-                        StackTrace = context.Exception.StackTrace
+                        new Information
+                        {
+                            Message = context.Exception.Message,
+                            Detail = context.Exception.StackTrace
+                        }
                     }
-                }));
+                });
             }
         }
     }

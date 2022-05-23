@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Models.Structs;
+using Api.Models.Sturcts.Inheritances;
+using System.Net;
 
 namespace Api.Controllers.CQRS._Develops.Command
 {
@@ -16,22 +18,18 @@ namespace Api.Controllers.CQRS._Develops.Command
         [Required] public string UserName { get; set; }
         [Required] public string Password { get; set; }
 
-        public class Handler : IRequestHandler<MongoMigrationCommand, Result<string>>
+        public class Handler : RequestMiddlewareHandler<MongoMigrationCommand, Result<string>>
         {
-            protected readonly IResponseFactory response;
             protected readonly IMongoORM mongo;
-            public Handler(
-                IResponseFactory responseFactory,
-                IMongoORM mongoORM)
+            public Handler(IMongoORM mongoORM)
             {
-                response = responseFactory;
                 mongo = mongoORM;
             }
 
-            public async Task<Result<string>> Handle(MongoMigrationCommand request, CancellationToken cancellationToken)
+            public override async Task<Result<string>> Handle(MongoMigrationCommand request, CancellationToken cancellationToken)
             {
                 if (request.UserName == "1cvö05-21c.0-" || request.Password == "CY+=3c4Y_=")
-                    return await response.Forbidden("no");
+                    return await Custom(HttpStatusCode.Forbidden, "no");
 
                 var entities = Assembly
                     .GetExecutingAssembly()
@@ -49,7 +47,7 @@ namespace Api.Controllers.CQRS._Develops.Command
                     if (!collectionNames.Contains(entity.Name))
                         mongo.db.CreateCollection(entity.Name, cancellationToken: cancellationToken);
 
-                return await response.Created("okki");
+                return await Custom(HttpStatusCode.OK, "okki");
             }
         }
     }

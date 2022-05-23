@@ -14,13 +14,6 @@ namespace Api.Controllers
 #pragma warning disable
     public class DevelopController : CoreController
     {
-        private readonly IResponseFactory _responseFactory;
-
-        public DevelopController(IResponseFactory responseFactory)
-        {
-            _responseFactory = responseFactory;
-        }
-
         /// <summary>
         /// Token üret
         /// </summary>
@@ -32,7 +25,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<Result<string>> Hello()
         {
-            return await _responseFactory.OK("Hello, sir!");
+            return new Result<string> { Entity = "Hellllo siiir !" };
         }
 
         /// <summary>

@@ -19,17 +19,12 @@
             <param name="body">Giriş yapma bilgileri.</param>
             <returns></returns>
         </member>
-        <member name="T:Api.Controllers.OutSourceController">
+        <member name="T:Api.Controllers.NoteController">
             <summary>
             Kullanıcı işlemlerini yönetir.
             </summary>
         </member>
-        <member name="T:Api.Controllers.UserController">
-            <summary>
-            Kullanıcı işlemlerini yönetir.
-            </summary>
-        </member>
-        <member name="M:Api.Controllers.UserController.Post(Api.Controllers.CQRS.Users.Command.CreateUserCommand)">
+        <member name="M:Api.Controllers.NoteController.Post(Api.Controllers.CQRS.Users.Command.CreateUserCommand)">
             <summary>
             Yeni Kullanıcı oluştur
             </summary>
@@ -37,6 +32,36 @@
             Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur.
             </remarks>
             <param name="body">Kullanıcının bilgileri.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Api.Controllers.OutSourceController">
+            <summary>
+            Kullanıcı işlemlerini yönetir.
+            </summary>
+        </member>
+        <member name="T:Api.Controllers.UserController">
+            <summary>
+            Kullanıcı işlemlerini yönetir
+            </summary>
+        </member>
+        <member name="M:Api.Controllers.UserController.Post(Api.Controllers.CQRS.Users.Command.CreateUserCommand)">
+            <summary>
+            Kullanıcı oluştur
+            </summary>
+            <remarks>
+            Belirtilen bilgiler ile yeni bir kullanıcı oluşturulur
+            </remarks>
+            <param name="body">Kullanıcının bilgileri</param>
+            <returns></returns>
+        </member>
+        <member name="M:Api.Controllers.UserController.Put(Api.Controllers.CQRS.Users.Command.UpdateUserCommand)">
+            <summary>
+            Kullanıcı güncelle
+            </summary>
+            <remarks>
+            Belirtilen tekil bilgi ile kullanıcının verilerini günceller
+            </remarks>
+            <param name="body">Kullanıcının bilgileri</param>
             <returns></returns>
         </member>
         <member name="T:Api.Controllers.DevelopController">
